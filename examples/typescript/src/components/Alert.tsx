@@ -1,14 +1,20 @@
 import React, { SFC } from 'react'
 import styled from 'styled-components'
 
-export type Kind = 'info' | 'positive' | 'negative' | 'warning'
-export type KindMap = Record<Kind, string>
+export enum AlertKind {
+  Info = 'info',
+  Positive = 'positive',
+  Negative = 'negative',
+  Warning = 'warning',
+}
+
+export type KindMap = Record<AlertKind, string>
 
 const kinds: KindMap = {
-  info: '#5352ED',
-  positive: '#2ED573',
-  negative: '#FF4757',
-  warning: '#FFA502',
+  [AlertKind.Info]: '#5352ED',
+  [AlertKind.Positive]: '#2ED573',
+  [AlertKind.Negative]: '#FF4757',
+  [AlertKind.Warning]: '#FFA502',
 }
 
 export interface AlertProps {
@@ -16,7 +22,8 @@ export interface AlertProps {
    * Set this to change alert kind
    * @default info
    */
-  kind: 'info' | 'positive' | 'negative' | 'warning'
+  kind: AlertKind
+  layout: 'Flex' | 'Block'
 }
 
 const AlertStyled = styled('div')`
@@ -24,7 +31,9 @@ const AlertStyled = styled('div')`
   background: white;
   border-radius: 3px;
   color: white;
-  background: ${({ kind = 'info' }: AlertProps) => kinds[kind]};
+  display: ${({ layout = 'Block' }: AlertProps) =>
+    layout === 'Flex' ? 'flex' : 'block'};
+  background: ${({ kind = AlertKind.Info }: AlertProps) => kinds[kind]};
 `
 
 export const Alert: SFC<AlertProps> = ({ kind, ...props }) => (
